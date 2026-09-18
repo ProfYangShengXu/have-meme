@@ -19,17 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-NOTE ON DATA LICENSES
-
-This repository contains CODE ONLY. The corpora it retrieves are distributed
-under their own licenses:
-
-  - Chumor (Ruo Zhi Ba / Michigan NLP) ....... CC-BY-NC-SA 4.0 (NON-COMMERCIAL)
-  - MemeBench ............................... CC-BY-NC-SA 4.0 (NON-COMMERCIAL)
-  - chinese-xinhua .......................... MIT
-
-Using the Chumor or MemeBench corpora for commercial purposes requires
-separate permission from their respective authors.
