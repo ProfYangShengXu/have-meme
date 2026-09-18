@@ -15,7 +15,7 @@ from pypinyin import lazy_pinyin, Style
 import jieba
 from rank_bm25 import BM25Okapi
 
-ROOT   = os.environ.get("MEME_DATA_ROOT", r"D:\datasets")
+ROOT   = r"D:\datasets"
 DB     = os.path.join(ROOT, "meme-db", "meme.db")
 HANZI  = os.path.join(ROOT, "chinese-xinhua", "data", "word.json")
 

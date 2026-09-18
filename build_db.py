@@ -15,7 +15,7 @@
 import os, io, json, csv, sqlite3, re, sys
 from pypinyin import lazy_pinyin, Style
 
-ROOT = os.environ.get("MEME_DATA_ROOT", r"D:\datasets")
+ROOT = r"D:\datasets"
 DB   = os.path.join(ROOT, "meme-db", "meme.db")
 os.makedirs(os.path.dirname(DB), exist_ok=True)
 
@@ -117,6 +117,24 @@ if os.path.exists(p):
                          aux=(d.get("explanation") or "").strip()[:300],
                          label=None, source="xinhua"))
     print(f"[idiom]    {len(rows)-before} 条")
+
+# 4) 用户原创梗（自己接的 / 写出来的好梗，追加式，不随重建丢失）
+p = os.path.join(ROOT, "meme-db", "user_memes.jsonl")
+if os.path.exists(p):
+    before = len(rows)
+    for _line in io.open(p, encoding="utf-8"):
+        _line = _line.strip()
+        if not _line:
+            continue
+        try:
+            d = json.loads(_line)
+        except Exception:
+            continue
+        if not d.get("text"):
+            continue
+        rows.append(dict(kind="user", text=d["text"], aux=d.get("aux", ""),
+                         label="good", source="user:" + str(d.get("date", ""))))
+    print(f"[user]     {len(rows)-before} 条")
 
 # ---------- 写库 ----------
 print(f"\n总计 {len(rows)} 条，开始计算派生字段...")
