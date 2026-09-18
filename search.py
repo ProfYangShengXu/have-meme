@@ -114,18 +114,25 @@ def route_bm25(q, limit=200):
     idx = sorted(range(len(scores)), key=lambda i: -scores[i])[:limit]
     return [(i, "bm25", "关键词相关") for i in idx if scores[i] > 0]
 
-# ---------------- RRF 融合 ----------------
+# ---------------- RRF 融合（带路由权重）----------------
+# 拼音路权重放大：谐音梗含一个音，能嫁接到任何含该音的词上，
+# 是三者里"最容易圆回来"的素材。字形次之，BM25 抓主题但不易嫁接。
+_ROUTE_W = {"pinyin": 1.8, "shape": 1.2, "bm25": 1.0}
+
 def rrf(rank_lists, k=60):
     agg, why = defaultdict(float), {}
-    for lst in rank_lists:
-        for rank, (i, route, reason) in enumerate(lst):
-            agg[i] += 1.0 / (k + rank + 1)
-            why.setdefault(i, []).append(route)
+    for route, lst in rank_lists:
+        w = _ROUTE_W.get(route, 1.0)
+        for rank, (i, _r, _reason) in enumerate(lst):
+            agg[i] += w / (k + rank + 1)
+            why.setdefault(i, []).append(_r)
     return sorted(agg.items(), key=lambda x: -x[1]), why
 
 # ---------------- 主 ----------------
 def search(q, top=10, kind=None, per_route=200):
-    ls = [route_pinyin(q, per_route), route_shape(q, per_route), route_bm25(q, per_route)]
+    ls = [("pinyin", route_pinyin(q, per_route)),
+          ("shape",  route_shape(q, per_route)),
+          ("bm25",   route_bm25(q, per_route))]
     merged, why = rrf(ls)
     out, seen = [], set()
     for i, sc in merged:
