@@ -117,7 +117,7 @@ def route_bm25(q, limit=200):
 # ---------------- RRF 融合（带路由权重）----------------
 # 拼音路权重放大：谐音梗含一个音，能嫁接到任何含该音的词上，
 # 是三者里"最容易圆回来"的素材。字形次之，BM25 抓主题但不易嫁接。
-_ROUTE_W = {"pinyin": 1.8, "shape": 1.2, "bm25": 1.0}
+_ROUTE_W = {"pinyin": 1.8, "shape": 1.2, "bm25": 0.5}
 
 def rrf(rank_lists, k=60):
     agg, why = defaultdict(float), {}
